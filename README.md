@@ -56,15 +56,15 @@ Delete
  
  <!-- Model Folder -->
 
-<!-- UserModel
+UserModel
 
         id int
         username string
         Salt string
         Hash string 
- -->
 
-<!-- BlogItemModel
+
+BlogItemModel
 
         id int
         UserId int
@@ -77,7 +77,7 @@ Delete
         IsPublished bool
         IsDeleted bool
 
--->
+
 <!--------------------------- Items that will be saved to our database are above ------------------------------------------------------->
 
 <!-- LoginModel
