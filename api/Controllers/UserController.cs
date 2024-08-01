@@ -22,7 +22,7 @@ public class UserController : ControllerBase
 
 //Add a user
 
-[HttpPost]
+[HttpPost("AddUsers")]
 
 public bool AddUser(CreateAccountDTO UserToAdd)
 {
