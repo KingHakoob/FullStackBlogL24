@@ -11,64 +11,43 @@ using Microsoft.EntityFrameworkCore;
 namespace api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly UserService _data;
+  private readonly UserService _data;
 
-    public UserController(UserService dataFromService)
-    {
-        _data = dataFromService;
-    }
-
-//Add a user
-
-[HttpPost("AddUsers")]
-
-public bool AddUser(CreateAccountDTO UserToAdd)
-{
-  return _data.AddUser(UserToAdd);
-}
-
-//GetAllUser Endpoint
-[HttpGet("GetAllUsers")]
-
-public IEnumerable<UserModel> GetAllUsers()
-{
-  return _data.GetAllUsers();
-}
-
-//GetUserByUserName
-[HttpGet("GetUserByUsername/{username}")]
-
-  public UserIdDTO GetUserIdDTOByUserName(string username)
-  {
-    return _data.GetUserIdDTOByUserName(username);
+  public UserController(UserService dataFromService) {
+    _data = dataFromService;
   }
 
 
+  [HttpPost("AddUser")]
+  public bool AddUser(CreateAccountDTO userToAdd) {
+    return _data.AddUser(userToAdd);
+  }
 
+  [HttpGet("GetAllUsers")]
+  public IEnumerable<UserModel> GetAllUsers() {
+    return _data.GetAllUsers();
+  }
 
-//Login
-[HttpPost("Login")]
+  [HttpGet("GetUserByUsername/{username}")]
+  public UserIdDTO GetUserIdDTOByUserName(string username) {
+    return _data.GetUserIdDTOByUserName(username);
+  }
 
-public IActionResult Login([FromBody] LoginDTO User)
-{
-  return _data.Login(User);
-}
+  [HttpPost("Login")]
+  public IActionResult Login([FromBody] LoginDTO User) {
+    return _data.Login(User);
+  }
 
-//Delete User Account
-[HttpPost("DeleteUser/{userToDelete}")]
-public bool DeleteUser(string userToDelete)
-{
-  return _data.DeleteUser(userToDelete);
-}
+  [HttpPost("DeleteUser/{userToDelete}")]
+  public bool DeleteUser(string userToDelete) {
+    return _data.DeleteUser(userToDelete);
+  }
 
-//Update user Account
-[HttpPost("UpdateUser")]
-public bool UpdateUser(int id, string username)
-{
-  return _data.UpdateUser(id,username);
-}
-
+  [HttpPost("UpdateUser")]
+  public bool UpdateUser(int id, string username) {
+    return _data.UpdateUser(id, username);
+  }
 }

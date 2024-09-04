@@ -12,52 +12,61 @@ public class BlogItemService : ControllerBase
 {
     private readonly DataContext _context;
 
-    public BlogItemService(DataContext context)
-    {
+    public BlogItemService(DataContext context) {
             _context = context;
     }
-    public bool AddBlogItems(BlogItemModel newBlogItem)
-    {
-        bool result = false;
+
+
+    public bool AddBlogItem(BlogItemModel newBlogItem) {
         _context.Add(newBlogItem);
-        result = _context.SaveChanges() != 0;
-        return result;
+        return _context.SaveChanges() != 0;
     }
 
-    public bool DeleteBlogItem(BlogItemModel blogDelete)
-    {
-        throw new NotImplementedException();
+    public bool DeleteBlogItem(BlogItemModel blogDelete) {
+        _context.Update<BlogItemModel>(blogDelete);
+        return _context.SaveChanges() != 0;
     }
 
-     public IEnumerable<BlogItemModel> GetAllBlogItems()
-    {
+     public IEnumerable<BlogItemModel> GetAllBlogItems() {
         return _context.BlogInfo;
     }
 
-    public IEnumerable<BlogItemModel> GetItemByCategory(string category)
-    {
+    public IEnumerable<BlogItemModel> GetBlogItemsByCategory(string category) {
         return _context.BlogInfo.Where(item => item.Category == category);
     }
 
-    public IEnumerable<BlogItemModel> GetItemsByDate(string date)
-    {
-        throw new NotImplementedException();
+    public IEnumerable<BlogItemModel> GetBlogItemsByDate(string date) {
+        return _context.BlogInfo.Where(item => item.Date == date);
     }
 
-    // public List<BlogItemModel> GetItemsByTag(string Tag)
-    // {
-    //     List<BlogItemModel> AllBlogsWithTag = new List<BlogItemModel>();
-    //     var allItems = GetAllBlogItems().ToList();
-    //     for(int i = 0; i < allItems.Count; i++)
-    //     {
-    //         BlogItemModel Item = allItems[i];
-    //         var itemArr = Item.Tag.Split(',');
-    //     }
+    public List<BlogItemModel> GetBlogItemsByTag(string tag) {
+        List<BlogItemModel> allBlogsWithTag = new List<BlogItemModel>();
+        var allItems = GetAllBlogItems().ToList();
+        for(int i = 0; i < allItems.Count; i++)
+        {
+            BlogItemModel item = allItems[i];
+            var itemArr = item.Tag.Split(',');
 
-    // }
+            for(int j = 0; j < itemArr.Length; j++) {
+                if(itemArr[j].Contains(tag)) {
+                    allBlogsWithTag.Add(item);
+                    break;
+                }
+            }
+        }
+        return allBlogsWithTag;
+    }
 
-    public bool UpdateBlogItems(BlogItemModel blogUpdate)
-    {
-        throw new NotImplementedException();
+    public bool UpdateBlogItem(BlogItemModel blogUpdate) {
+        _context.Update<BlogItemModel>(blogUpdate);
+        return _context.SaveChanges() != 0;
+    }
+
+    public IEnumerable<BlogItemModel> GetPublishedBlogItems() {
+        return _context.BlogInfo.Where(item => item.IsPublished);
+    }
+
+    public IEnumerable<BlogItemModel> GetBlogItemsByUserId(int userId) {
+        return _context.BlogInfo.Where(item => item.UserId == userId);
     }
 }

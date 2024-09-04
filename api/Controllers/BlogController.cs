@@ -9,67 +9,59 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class BlogController : ControllerBase
 {
-
     private readonly BlogItemService _data;
 
-    public BlogController(BlogItemService dataFromService)
-    {
+    public BlogController(BlogItemService dataFromService) {
         _data = dataFromService;
     }
 
-    [HttpPost("AddBlogItems")]
 
-    public bool AddBlogItems(BlogItemModel newBlogItem)
-    {
-        return _data.AddBlogItems(newBlogItem);
+    [HttpPost("AddBlogItem")]
+    public bool AddBlogItem(BlogItemModel newBlogItem) {
+        return _data.AddBlogItem(newBlogItem);
     }
 
-    //GetAllBlogItems 
-    [HttpGet("GetBlogItems")]
-
-    public IEnumerable<BlogItemModel> GetAllBlogItems()
-    {
+    [HttpGet("GetAllBlogItems")]
+    public IEnumerable<BlogItemModel> GetAllBlogItems() {
         return _data.GetAllBlogItems();
     }
 
-    //GetBlogItemsByCategory
-    [HttpGet("GetBlogItemByCategory/{Category}")]
-    public IEnumerable<BlogItemModel> GetItemByCategory(string Category)
-    {
-        return _data.GetItemByCategory(Category);
+    [HttpGet("GetBlogItemsByCategory/{category}")]
+    public IEnumerable<BlogItemModel> GetBlogItemsByCategory(string category) {
+        return _data.GetBlogItemsByCategory(category);
     }
 
-    //GetItemsByTags
-
-    // [HttpGet("GetItemsByTag/{Tag}")]
-    // public List<BlogItemModel> GetItemsByTag(string Tag)
-    // {
-    //     return _data.GetItemsByTag(Tag);
-    // }
-
-    //GetBlogItemsByDate
-
-    [HttpGet("GetItemsByDate/{Date}")]
-
-    public IEnumerable<BlogItemModel> GetItemsByDate(string Date)
-    {
-        return _data.GetItemsByDate(Date);
+    [HttpGet("GetBlogItemsByTag/{tag}")]
+    public List<BlogItemModel> GetBlogItemsByTag(string tag) {
+        return _data.GetBlogItemsByTag(tag);
     }
 
-    //UpdateBlogItems
-    [HttpPost("UpdateBlogItems")]
-    public bool UpdateBlogItems(BlogItemModel BlogUpdate)
-    {
-        return _data.UpdateBlogItems(BlogUpdate);
+    [HttpGet("GetBlogItemsByDate/{date}")]
+
+    public IEnumerable<BlogItemModel> GetBlogItemsByDate(string date) {
+        return _data.GetBlogItemsByDate(date);
     }
 
-    //DeleteBlogItems
-    [HttpPost("DeleteBlogItem/{BlogDelete}")]
-    public bool DeleteBlogItem(BlogItemModel BlogDelete)
-    {
-        return _data.DeleteBlogItem(BlogDelete);
+    [HttpPost("UpdateBlogItem")]
+    public bool UpdateBlogItem(BlogItemModel blogUpdate) {
+        return _data.UpdateBlogItem(blogUpdate);
+    }
+
+    [HttpPost("DeleteBlogItem/{blogDelete}")]
+    public bool DeleteBlogItem(BlogItemModel blogDelete) {
+        return _data.DeleteBlogItem(blogDelete);
+    }
+
+    [HttpGet("GetPublishedItems")]
+    public IEnumerable<BlogItemModel> GetPublishedBlogItems() {
+        return _data.GetPublishedBlogItems();
+    }
+
+    [HttpGet("GetBlogItemsByUserId/{userId}")]
+    public IEnumerable<BlogItemModel> GetBlogItemsByUserId(int userId) {
+        return _data.GetBlogItemsByUserId(userId);
     }
 }
