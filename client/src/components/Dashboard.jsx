@@ -20,7 +20,7 @@ import {
 const Dashboard = ({ isDarkMode, setUser }) => {
   const navigate = useNavigate();
 
-  const { userId, publisherName } = JSON.parse(localStorage.getItem("UserData"));
+  let userId, publisherName;
 
   const [blogData, setBlogData] = useState({
     id: 0,
@@ -126,7 +126,11 @@ const Dashboard = ({ isDarkMode, setUser }) => {
   }
 
   const loadUserData = async () => {
-    setUser({ userId, publisherName});
+    const userData = JSON.parse(localStorage.getItem("UserData"));
+
+    userId = userData.userId;
+    publisherName = userData.publisherName;
+    setUser(userData);
 
     setTimeout(async () => {
       setBlogItems(await getBlogItemsByUserId(userId));
