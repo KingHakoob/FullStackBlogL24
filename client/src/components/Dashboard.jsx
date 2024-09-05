@@ -14,10 +14,13 @@ import {
   addBlogItem,
   checkToken,
   getBlogItemsByUserId,
+  updateBlogItem
 } from "../Services/DataService";
 
 const Dashboard = ({ isDarkMode, setUser }) => {
   const navigate = useNavigate();
+
+  const { userId, publisherName } = JSON.parse(localStorage.getItem("UserData"));
 
   const [blogData, setBlogData] = useState({
     id: 0,
@@ -78,7 +81,6 @@ const Dashboard = ({ isDarkMode, setUser }) => {
   };
 
   const handleSavePost = async (publish) => {
-    const { userId, publisherName } = JSON.parse(localStorage.getItem("UserData"));
 
     const post = {
       ...blogData,
@@ -89,21 +91,46 @@ const Dashboard = ({ isDarkMode, setUser }) => {
     };
     handleClose();
 
-    if (await addBlogItem(post)) {
-      const userBlogItems = await getBlogItemsByUserId(userId);
-      setBlogItems(userBlogItems);
+    let response = false;
+    if(edit) {
+      response = await updateBlogItem(post);
+    } else {
+      response = await addBlogItem(post);
     }
-  };
+
+    if (response) {
+      setBlogItems(await getBlogItemsByUserId(userId));
+    } else {
+      alert(`Blog item not ${edit ? 'updated' : 'added'}`)
+    }
+  }
+
+  const handlePublish = async (post) => {
+    post.isPublished = !post.isPublished;
+
+    if(await updateBlogItem(post)) {
+      setBlogItems(await getBlogItemsByUserId(userId));
+    } else {
+      alert('Blog item not updated');
+    }
+  }
+
+  const handleDelete = async (post) => {
+    post.isDeleted = !post.isDeleted;
+
+    if(await updateBlogItem(post)) {
+      setBlogItems(await getBlogItemsByUserId(userId));
+    } else {
+      alert('Blog item not deleted');
+    }
+  }
 
   const loadUserData = async () => {
-    const userInfo = JSON.parse(localStorage.getItem("UserData"));
-    setUser(userInfo);
+    setUser({ userId, publisherName});
 
     setTimeout(async () => {
-      const userBlogItems = await getBlogItemsByUserId(userInfo.userId);
-      setBlogItems(userBlogItems);
+      setBlogItems(await getBlogItemsByUserId(userId));
       setIsLoading(false);
-      console.log(userBlogItems);
     }, 1000);
   };
 
@@ -228,10 +255,10 @@ const Dashboard = ({ isDarkMode, setUser }) => {
                       <ListGroup key={item.id}>
                         {item.title}
                         <Col className="d-flex justify-content-end mx-2">
-                          <Button variant="outline-danger mx-2">Delete</Button>
+                          <Button variant="outline-danger mx-2" onClick={() => handleDelete(item)}>Delete</Button>
                           <Button variant="outline-info mx-2" onClick={(e) => handleShow(e, item)}>Edit</Button>
-                          <Button variant="outline-primary mx-2">
-                            Publish
+                          <Button variant="outline-primary mx-2" onClick={() => handlePublish(item)}>
+                            UnPublish
                           </Button>
                         </Col>
                       </ListGroup>
@@ -248,9 +275,9 @@ const Dashboard = ({ isDarkMode, setUser }) => {
                       <ListGroup key={item.id}>
                         {item.title}
                         <Col className="d-flex justify-content-end mx-2">
-                          <Button variant="outline-danger mx-2">Delete</Button>
+                          <Button variant="outline-danger mx-2" onClick={() => handleDelete(item)}>Delete</Button>
                           <Button variant="outline-info mx-2" onClick={(e) => handleShow(e, item)}>Edit</Button>
-                          <Button variant="outline-primary mx-2">
+                          <Button variant="outline-primary mx-2" onClick={() => handlePublish(item)}>
                             Publish
                           </Button>
                         </Col>

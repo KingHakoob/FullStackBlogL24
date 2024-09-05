@@ -29,15 +29,14 @@ public class UserService : ControllerBase
 
     public bool AddUser(CreateAccountDTO userToAdd) {
         bool result = false;
-        if(!DoesUserExist(userToAdd.Username))
-        {
-            UserModel user = new UserModel();
+        if(!DoesUserExist(userToAdd.Username)) {
             var newHashedPassword = HashPassword(userToAdd.Password);
-
-            user.Id = userToAdd.Id;
-            user.Username = userToAdd.Username;
-            user.Salt =  newHashedPassword.Salt;
-            user.Hash = newHashedPassword.Hash;
+            UserModel user = new() {
+                Id = userToAdd.Id,
+                Username = userToAdd.Username,
+                Salt = newHashedPassword.Salt,
+                Hash = newHashedPassword.Hash
+            };
 
             _context.Add(user);
             result = _context.SaveChanges() != 0;
@@ -46,25 +45,19 @@ public class UserService : ControllerBase
     }
 
     public PasswordDTO HashPassword(string password) {
-        //create a password DTO this is what will returned
-        //New instance of our PasswordDTO
-        PasswordDTO newHashedPassword = new PasswordDTO();
-        //create a new instance or byte 64 array and save it to Saltbytes
-       byte[] SaltBytes = new byte[64];
-       //RNGCryptoServiceProvider creates random number
-       var provider = new RNGCryptoServiceProvider();
-       //now here we are going to get rid of the zeros
-       provider.GetNonZeroBytes(SaltBytes); 
-       //create a variable for our Salt. This will take our 64 string and encrypt it for us
-       var Salt = Convert.ToBase64String(SaltBytes);
-       //Now lets create our Hash. first arg is password,bytes, iterations
-       var Rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, SaltBytes,10000);
-       var Hash = Convert.ToBase64String(Rfc2898DeriveBytes.GetBytes(256));
-       
-       newHashedPassword.Salt = Salt;
-       newHashedPassword.Hash = Hash;
+        byte[] SaltBytes = new byte[64];
+        var provider = new RNGCryptoServiceProvider();
+        provider.GetNonZeroBytes(SaltBytes); 
+        var Salt = Convert.ToBase64String(SaltBytes);
+        var Rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, SaltBytes, 10000);
+        var Hash = Convert.ToBase64String(Rfc2898DeriveBytes.GetBytes(256));
 
-       return newHashedPassword;
+        PasswordDTO newHashedPassword = new() {
+            Salt = Salt,
+            Hash = Hash
+        };
+
+        return newHashedPassword;
     }
 
     public bool VerifyUserPassword(string? Password, string?StoredHash, string? StoredSalt) {
@@ -85,8 +78,7 @@ public class UserService : ControllerBase
 
     public IActionResult Login(LoginDTO user) {
         IActionResult result = Unauthorized();
-        if(DoesUserExist(user.UserName))
-        {
+        if(DoesUserExist(user.UserName)) {
 
             UserModel foundUser = GetAllUserDataByUsername(user.UserName);
             if(VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt)) {
@@ -119,12 +111,9 @@ public class UserService : ControllerBase
     }
 
     public bool DeleteUser(string userToDelete) {
-        //send over our username
         UserModel foundUser = GetUserByUsername(userToDelete);
         bool result = false;
-        if(foundUser != null)
-        {
-            foundUser.Username = userToDelete;
+        if(foundUser != null) {
             _context.Remove<UserModel>(foundUser);
             result = _context.SaveChanges() != 0;
         }
@@ -138,8 +127,7 @@ public class UserService : ControllerBase
     public bool UpdateUser(int id, string username) {
        UserModel foundUser = GetUserById(id);
        bool result = false;
-       if(foundUser != null)
-       {
+       if(foundUser != null) {
         foundUser.Username = username;
         _context.Update<UserModel>(foundUser);
         result = _context.SaveChanges() !=0;

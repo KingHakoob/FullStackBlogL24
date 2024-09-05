@@ -28,7 +28,7 @@ public class BlogItemService : ControllerBase
     }
 
      public IEnumerable<BlogItemModel> GetAllBlogItems() {
-        return _context.BlogInfo;
+        return _context.BlogInfo.Where(item => item.IsDeleted == false);
     }
 
     public IEnumerable<BlogItemModel> GetBlogItemsByCategory(string category) {
@@ -40,7 +40,7 @@ public class BlogItemService : ControllerBase
     }
 
     public List<BlogItemModel> GetBlogItemsByTag(string tag) {
-        List<BlogItemModel> allBlogsWithTag = new List<BlogItemModel>();
+        List<BlogItemModel> allBlogsWithTag = [];
         var allItems = GetAllBlogItems().ToList();
         for(int i = 0; i < allItems.Count; i++)
         {
@@ -63,10 +63,10 @@ public class BlogItemService : ControllerBase
     }
 
     public IEnumerable<BlogItemModel> GetPublishedBlogItems() {
-        return _context.BlogInfo.Where(item => item.IsPublished);
+        return _context.BlogInfo.Where(item => item.IsPublished && item.IsDeleted == false);
     }
 
     public IEnumerable<BlogItemModel> GetBlogItemsByUserId(int userId) {
-        return _context.BlogInfo.Where(item => item.UserId == userId);
+        return _context.BlogInfo.Where(item => item.UserId == userId && item.IsDeleted == false);
     }
 }

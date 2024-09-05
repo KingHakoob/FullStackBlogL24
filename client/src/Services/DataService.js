@@ -2,36 +2,36 @@ const baseUrl = 'http://localhost:5006/';
 
 const checkToken = () => {
     const token = localStorage.getItem('Token');
-    const result = token && true;
-    return result;
+    const response = token && true;
+    return response;
 }
 
 const createAccount = async (createdUser) => {
-    const result = await fetch(`${baseUrl}User/AddUser`, {
+    const response = await fetch(`${baseUrl}User/AddUser`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }, body: JSON.stringify(createdUser)
     });
-    if(!result.ok) {
-        const message = `Yo you have an error. Check your code! ${result.status}`;
+    if(!response.ok) {
+        const message = `Yo you have an error. Check your code! ${response.status}`;
         throw new Error(message);
     }
-    const data = await result.json();
+    const data = await response.json();
 }
 
 const login = async (loginUser) => {
-    const result = await fetch(`${baseUrl}User/Login`, {
+    const response = await fetch(`${baseUrl}User/Login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }, body: JSON.stringify(loginUser)
     });
-    if(!result.ok) {
-        const message = `Yo you have an error. Check your code! ${result.status}`;
+    if(!response.ok) {
+        const message = `Yo you have an error. Check your code! ${response.status}`;
         throw new Error(message);
     }
-    const data = await result.json();
+    const data = await response.json();
 
     if(data.token != null) {
         localStorage.setItem("Token", data.token);
@@ -41,53 +41,74 @@ const login = async (loginUser) => {
 }
 
 const getLoggedInUser = async (username) => {
-    const result = await fetch(`${baseUrl}User/GetUserByUsername/${username}`);
-    const data = await result.json();
+    const response = await fetch(`${baseUrl}User/GetUserByUsername/${username}`);
+    const data = await response.json();
     localStorage.setItem("UserData", JSON.stringify(data));
     return data;
 }
 
 const addBlogItem = async (blogItem) => {
-    const result = await fetch(`${baseUrl}Blog/AddBlogItem`, {
+    const response = await fetch(`${baseUrl}Blog/AddBlogItem`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }, body: JSON.stringify(blogItem)
     });
-    if(!result.ok) {
-        const message = `Yo you have an error. Check your code! ${result.status}`;
+    if(!response.ok) {
+        const message = `Yo you have an error. Check your code! ${response.status}`;
         throw new Error(message);
     }
-    const data = await result.json();
+    const data = await response.json();
     return data;
 }
 
 // Experimental
 const sendData = async (endpoint, sentData) => {
-    const result = await fetch(`${baseUrl}${endpoint}`, {
+    const response = await fetch(`${baseUrl}${endpoint}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }, body: JSON.stringify(sentData)
     });
-    if(!result.ok) {
-        const message = `Yo you have an error. Check your code! ${result.status}`;
+    if(!response.ok) {
+        const message = `Yo you have an error. Check your code! ${response.status}`;
         throw new Error(message);
     }
-    const data = await result.json();
+    const data = await response.json();
     return data;
 }
 
 const getBlogItems = async () => {
-    const result = await fetch(`${baseUrl}Blog/GetBlogItems`);
-    const data = await result.json();
+    const response = await fetch(`${baseUrl}Blog/GetBlogItems`);
+    const data = await response.json();
     return data;
 }
 
 const getBlogItemsByUserId = async (userId) => {
-    const result = await fetch(`${baseUrl}Blog/GetBlogItemsByUserId/${userId}`);
-    const data = await result.json();
+    const response = await fetch(`${baseUrl}Blog/GetBlogItemsByUserId/${userId}`);
+    const data = await response.json();
     return data;
 }
 
-export { checkToken, createAccount, login, getLoggedInUser, addBlogItem, sendData, getBlogItems, getBlogItemsByUserId }
+const updateBlogItem = async (blogItem) => {
+    const response = await fetch(`${baseUrl}Blog/UpdateBlogItem`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }, body: JSON.stringify(blogItem)
+    });
+    if(!response.ok) {
+        const message = `Yo you have an error. Check your code! ${response.status}`;
+        throw new Error(message);
+    }
+    const data = await response.json();
+    return data;
+}
+
+const getPublishedBlogItems = async () => {
+    const response = await fetch(`${baseUrl}Blog/GetPublishedItems`);
+    const data = await response.json();
+    return data;
+}
+
+export { checkToken, createAccount, login, getLoggedInUser, addBlogItem, sendData, getBlogItems, getBlogItemsByUserId, updateBlogItem, getPublishedBlogItems }
