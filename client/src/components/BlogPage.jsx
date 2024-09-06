@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Col, Container, Image, Row } from "react-bootstrap";
 import { getPublishedBlogItems } from "../Services/DataService";
 
-const BlogPage = () => {
+const BlogPage = ({ setUser }) => {
   const [blogItems, setBlogItems] = useState([]);
   
   const getBlogItems = async () => {
@@ -11,6 +11,8 @@ const BlogPage = () => {
 
   useEffect(() => {
     getBlogItems();
+
+    if(localStorage.getItem('Token')) setUser(JSON.parse(localStorage.getItem('UserData')));
   }, [])
   
   

@@ -62,7 +62,7 @@ const NavBar = ({
                 </Nav.Link>
               )}
 
-              <Nav.Link>Welcome {user ? user.publisherName : "Guest"}</Nav.Link>
+              <Nav.Link>Welcome {user ? user.username : "Guest"}</Nav.Link>
               <Nav.Link eventKey={2} href="#memes">
                 <Image className="profilePic" src={Moon} roundedCircle />
               </Nav.Link>

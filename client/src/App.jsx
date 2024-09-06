@@ -47,7 +47,7 @@ const App = () => {
                 <h1>Our Blog</h1>
               </Col>
               <Routes>
-                <Route path="/" element={<BlogPage />} />
+                <Route path="/" element={<BlogPage setUser={setUser} />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/CreateAccount" element={<CreateAccount />} />
                 <Route path="/Dashboard" element={<Dashboard isDarkMode={isDarkMode} setUser={setUser} />} />

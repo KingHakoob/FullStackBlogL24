@@ -20,7 +20,8 @@ import {
 const Dashboard = ({ isDarkMode, setUser }) => {
   const navigate = useNavigate();
 
-  let userId, publisherName;
+  const [userId, setUserId] = useState(0);
+  const [username, setUsername] = useState('');
 
   const [blogData, setBlogData] = useState({
     id: 0,
@@ -85,11 +86,12 @@ const Dashboard = ({ isDarkMode, setUser }) => {
     const post = {
       ...blogData,
       userId,
-      publisherName,
+      publisherName: username,
       date: new Date(),
       isPublished: publish,
     };
     handleClose();
+    console.log('handleSavePost: ', post);
 
     let response = false;
     if(edit) {
@@ -128,12 +130,13 @@ const Dashboard = ({ isDarkMode, setUser }) => {
   const loadUserData = async () => {
     const userData = JSON.parse(localStorage.getItem("UserData"));
 
-    userId = userData.userId;
-    publisherName = userData.publisherName;
+    setUserId(userData.userId);
+    setUsername(userData.username);
     setUser(userData);
 
+    console.log(userId)
     setTimeout(async () => {
-      setBlogItems(await getBlogItemsByUserId(userId));
+      setBlogItems(await getBlogItemsByUserId(userData.userId));
       setIsLoading(false);
     }, 1000);
   };

@@ -102,7 +102,7 @@ public class UserService : ControllerBase
         UserModel user = _context.UserInfo.SingleOrDefault(user => user.Username == username);
         return new UserIdDTO {
             UserId = user.Id,
-            PublisherName = user.Username
+            Username = user.Username
         };
     }
 
