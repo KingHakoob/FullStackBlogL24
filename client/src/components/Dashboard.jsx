@@ -91,7 +91,6 @@ const Dashboard = ({ isDarkMode, setUser }) => {
       isPublished: publish,
     };
     handleClose();
-    console.log('handleSavePost: ', post);
 
     let response = false;
     if(edit) {
@@ -134,7 +133,6 @@ const Dashboard = ({ isDarkMode, setUser }) => {
     setUsername(userData.username);
     setUser(userData);
 
-    console.log(userId)
     setTimeout(async () => {
       setBlogItems(await getBlogItemsByUserId(userData.userId));
       setIsLoading(false);
