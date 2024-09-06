@@ -42,9 +42,9 @@ const App = () => {
             <NavBar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} user={user} setUser={setUser} />
           </Container>
           <CarouselHero isDarkMode={isDarkMode} />
-            <Row className="text-center">
+            <Row>
               <Col>
-                <h1>Our Blog</h1>
+                <h1 className="text-center">Our Blog</h1>
               </Col>
               <Routes>
                 <Route path="/" element={<BlogPage setUser={setUser} />} />

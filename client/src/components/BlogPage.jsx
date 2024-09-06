@@ -9,6 +9,11 @@ const BlogPage = ({ setUser }) => {
     setBlogItems(await getPublishedBlogItems());
   }
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US');
+  };
+
   useEffect(() => {
     getBlogItems();
 
@@ -18,26 +23,30 @@ const BlogPage = ({ setUser }) => {
   
   return (
     <>
-      <h1 className="text-center">View Post Page</h1>
-      <Container className="p-5">
+      <h1 className='text-center'>View Post Page</h1>
+      <Container className='p-5'>
         <Row>
           <Col>
             {blogItems.map((item, index) => (
               <Container key={index}>
                     <Row className={index%2 == 1 && 'flex-row-reverse'}>
                         <Col md={6}>
-                            <Row style={{border: "solid"}}>
-                              <Col style={{border: "solid"}} className='d-flex justify-content-center' md={12}>{item.title}</Col>
+                            <Row>
+                              <Col className='d-flex justify-content-center' md={12}>
+                                <h2 style={{ fontFamily:'Sanserif', borderStyle:'outset', borderRadius:'15px', padding:'15px' }}>{item.title}</h2>
+                              </Col>
                                 <Col md={12}>
                                     <Row>
-                                        <Col className='d-flex justify-content-center' md={6}>{item.publisherName}</Col>
-                                        <Col style={{border: "solid"}} md={6}>{item.date}</Col>
+                                        <Col className='d-flex justify-content-center' md={6}>Publisher: {item.publisherName}</Col>
+                                        <Col md={6}>Date: { formatDate(item.date) }</Col>
                                     </Row>
                                 </Col>
-                              <Col style={{border: 'solid'}} className='d-flex justify-content-center' md={12}><Image src={item.image} alt='item image' width='400px' height='200px' /></Col>
+                              <Col className='d-flex justify-content-center' md={12}><Image src={item.image} alt='item image' width='100%' height='100%' style={{ borderRadius:'5%'}} /></Col>
                             </Row>
                         </Col>
-                        <Col style={{border: 'solid'}} className='d-flex justify-content-center' md={6}>{item.description}</Col>
+                        <Col className='d-flex justify-content-center align-items-center' md={6}>
+                          <p style={{ fontSize:'26px' }}>{item.description}</p>
+                        </Col>
                     </Row>
               </Container>
             ))}

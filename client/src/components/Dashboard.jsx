@@ -42,7 +42,7 @@ const Dashboard = ({ isDarkMode, setUser }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleClose = () => setShow(false);
-  const handleShow = (e, { id, title, description, category, tags, image }) => {
+  const handleShow = (e, { id, title, description, category, tag, image }) => {
     setShow(true);
 
     if (e.target.textContent === "Add Blog Item") {
@@ -56,7 +56,7 @@ const Dashboard = ({ isDarkMode, setUser }) => {
       title,
       description,
       category,
-      tags,
+      tag,
       image
     });
   };
@@ -153,11 +153,8 @@ const Dashboard = ({ isDarkMode, setUser }) => {
         className={isDarkMode ? "bg-dark text-light p-5" : "bg-light p-5"}
         fluid
       >
-        <Button variant="outline-primary m-2" onClick={(e) => handleShow(e, { id: 0, title: '', description: '', category: '', tags: '', image: '' })}>
+        <Button variant="outline-primary m-2" onClick={(e) => handleShow(e, { id: 0, title: '', description: '', category: '', tag: '', image: '' })}>
           Add Blog Item
-        </Button>
-        <Button variant="outline-primary m-2" onClick={handleShow}>
-          Edit Blog Item
         </Button>
 
         <Modal
@@ -257,15 +254,25 @@ const Dashboard = ({ isDarkMode, setUser }) => {
                 {blogItems.map(
                   (item) =>
                     item.isPublished && (
-                      <ListGroup key={item.id}>
-                        {item.title}
-                        <Col className="d-flex justify-content-end mx-2">
-                          <Button variant="outline-danger mx-2" onClick={() => handleDelete(item)}>Delete</Button>
-                          <Button variant="outline-info mx-2" onClick={(e) => handleShow(e, item)}>Edit</Button>
+                      <ListGroup as="ul" className="mb-2" key={item.id}>
+                        <ListGroup.Item as={"li"} md={2}><h3>Title:</h3>{ item.title }</ListGroup.Item>
+                        <ListGroup.Item as={"li"} md={3}><h3>Description:</h3>{ item.description }</ListGroup.Item>
+                        <ListGroup.Item as={"li"} md={2}> <h3>Category:</h3> { item.category }</ListGroup.Item>
+                        <ListGroup.Item  as={"li"} md={2}><h3>Tags:</h3>{ item.tag }</ListGroup.Item>
+                        <ListGroup.Item as={"li"} md={3}>
+                         Image: { item.image ? item.image.slice(5, 14) : 'No image' }
+                        </ListGroup.Item>
+                        <ListGroup.Item as={"li"} className="d-flex justify-content-end">
+                          <Button variant="outline-danger mx-2" onClick={() => handleDelete(item)}>
+                            Delete
+                          </Button>
+                          <Button variant="outline-info mx-2" onClick={(e) => handleShow(e, item)}>
+                            Edit
+                          </Button>
                           <Button variant="outline-primary mx-2" onClick={() => handlePublish(item)}>
                             UnPublish
                           </Button>
-                        </Col>
+                        </ListGroup.Item>
                       </ListGroup>
                     )
                 )}
@@ -277,15 +284,25 @@ const Dashboard = ({ isDarkMode, setUser }) => {
                 {blogItems.map(
                   (item) =>
                     !item.isPublished && (
-                      <ListGroup key={item.id}>
-                        {item.title}
-                        <Col className="d-flex justify-content-end mx-2">
-                          <Button variant="outline-danger mx-2" onClick={() => handleDelete(item)}>Delete</Button>
-                          <Button variant="outline-info mx-2" onClick={(e) => handleShow(e, item)}>Edit</Button>
+                      <ListGroup as="ul" className="mb-2" key={item.id}>
+                        <ListGroup.Item as={"li"} md={2}><h3>Title:</h3>{ item.title }</ListGroup.Item>
+                        <ListGroup.Item as={"li"} md={3}><h3>Description:</h3>{ item.description }</ListGroup.Item>
+                        <ListGroup.Item as={"li"} md={2}> <h3>Category:</h3> { item.category }</ListGroup.Item>
+                        <ListGroup.Item  as={"li"} md={2}><h3>Tags:</h3>{ item.tag }</ListGroup.Item>
+                        <ListGroup.Item as={"li"} md={3}>
+                         Image: { item.image ? item.image.slice(5, 14) : 'No image' }
+                        </ListGroup.Item>
+                        <ListGroup.Item as={"li"} className="d-flex justify-content-end">
+                          <Button variant="outline-danger mx-2" onClick={() => handleDelete(item)}>
+                            Delete
+                          </Button>
+                          <Button variant="outline-info mx-2" onClick={(e) => handleShow(e, item)}>
+                            Edit
+                          </Button>
                           <Button variant="outline-primary mx-2" onClick={() => handlePublish(item)}>
                             Publish
                           </Button>
-                        </Col>
+                        </ListGroup.Item>
                       </ListGroup>
                     )
                 )}
